@@ -1,21 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { SubmitFormDto } from './submit-form.dto';
-import { Axios } from 'axios';
+import { InjectModel } from '@nestjs/mongoose';
+import { FormDocument } from './schemas/form.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class FormService {
-  private axios = new Axios();
+  constructor(@InjectModel('Form') private formModel: Model<FormDocument>) {}
 
-  async submitForm(submitFormDto: SubmitFormDto) {
-    const { name, email, cep } = submitFormDto;
-    const response = await this.axios.get(
-      `https://brasilapi.com.br/api/cep/v1/${cep}`,
-    );
-
-    if (response.status !== 200 || response.data.erro) {
-      throw new Error('CEP inválido');
-    }
-
-    return { name, email, cep };
+  async submitForm(submitFormDto: SubmitFormDto): Promise<FormDocument> {
+    const createdForm = new this.formModel(submitFormDto);
+    return createdForm.save();
   }
 }

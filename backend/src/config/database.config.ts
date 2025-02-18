@@ -1,3 +1,7 @@
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 export const databaseConfig = {
   uri: process.env.MONGO_URI || 'mongodb://localhost:27017/form-challenge',
 };
+
