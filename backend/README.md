@@ -1,99 +1,143 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🛠 Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Visão Geral
+O backend foi desenvolvido usando **NestJS** e **MongoDB** (via MongoDB Atlas). Ele gerencia o armazenamento e a validação dos dados do formulário, além de fornecer endpoints para cadastro, listagem e edição.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ npm install
+## 📂 Estrutura de Pastas
+```
+backend/
+├── src/
+│   │
+│   ├── form/                  # Módulo do formulário
+│   │   ├── form.controller.ts # Controlador do formulário
+│   │   ├── form.service.ts    # Serviço do formulário
+│   │   ├── form.module.ts     # Módulo do formulário
+│   │   ├── dto/               # DTOs (Data Transfer Objects)
+│   │   │   └── submit-form.dto.ts
+│   │   ├── schemas/           # Schemas do MongoDB
+│   │   │   └── form.schema.ts
+│   │   
+│   │          
+│   ├── config/                # Configurações do projeto
+│   ├── database/              # Configuração do banco de dados
+│   ├── app.module.ts          # Módulo principal da aplicação
+│   ├── app.controller.ts      # Controller principal
+│   └── main.ts                # Ponto de entrada da aplicação
+├── test/                      # Testes automatizados
+├── .env                       # Variáveis de ambiente
+├── .eslintrc.js               # Configuração do ESLint
+├── .prettierrc                # Configuração do Prettier
+├── nest-cli.json              # Configuração do NestJS CLI
+├── package.json               # Dependências e scripts
+├── tsconfig.json              # Configuração do TypeScript
+└── tsconfig.build.json        # Configuração do TypeScript para build
 ```
 
-## Compile and run the project
-
+## 🚀 Como Executar
+### 1️⃣ Instale as dependências:
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+### 2️⃣ Configure o arquivo `.env` com as variáveis de ambiente:
+```env
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+### 3️⃣ Inicie o servidor de desenvolvimento:
 ```bash
-$ npm install -g mau
-$ mau deploy
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+📌 O backend estará rodando em:
+```
+http://localhost:3000
+```
 
-## Resources
+## 📡 Endpoints
+### 🔹 **POST /form/submit** → Envia um novo formulário.
+#### 🔸 Body:
+```json
+{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "cep": "12345678"
+}
+```
+#### 🔸 Resposta:
+```json
+{
+  "message": "Formulário enviado com sucesso!",
+  "data": {
+    "_id": "64f1b2c3e4b0d8f8f8f8f8f8",
+    "name": "João Silva",
+    "email": "joao@example.com",
+    "cep": "12345678"
+  }
+}
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+### 🔹 **GET /form** → Lista todos os formulários cadastrados.
+#### 🔸 Resposta:
+```json
+[
+  {
+    "_id": "64f1b2c3e4b0d8f8f8f8f8f8",
+    "name": "João Silva",
+    "email": "joao@example.com",
+    "cep": "12345678"
+  }
+]
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### 🔹 **PATCH /form/:id** → Atualiza um formulário existente.
+#### 🔸 Body:
+```json
+{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "cep": "12345678"
+}
+```
+#### 🔸 Resposta:
+```json
+{
+  "message": "Formulário atualizado com sucesso!",
+  "data": {
+    "_id": "64f1b2c3e4b0d8f8f8f8f8f8",
+    "name": "João Silva",
+    "email": "joao@example.com",
+    "cep": "12345678"
+  }
+}
+```
 
-## Support
+## ✅ Validações
+✔ **E-mail único**: Não é possível cadastrar o mesmo e-mail mais de uma vez.
+✔ **CEP válido**: O CEP é validado usando a API da BrasilAPI.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 📦 Dependências Principais
+- `@nestjs/mongoose`: Para integração com o MongoDB.
+- `mongoose`: Para modelagem de dados no MongoDB.
+- `axios`: Para integração com a API da BrasilAPI.
+- `class-validator`: Para validação de DTOs.
 
-## Stay in touch
+## 🤝 Como Contribuir
+1. Faça um **fork** do repositório.
+2. Crie uma **branch** para sua feature:
+```bash
+git checkout -b minha-feature
+```
+3. Commit suas mudanças:
+```bash
+git commit -m 'Adicionando nova feature'
+```
+4. Envie para o repositório remoto:
+```bash
+git push origin minha-feature
+```
+5. Abra um **Pull Request**.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 📄 Licença
+Este projeto está licenciado sob a licença **MIT**. Consulte o arquivo `LICENSE` para mais detalhes.
 
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
