@@ -36,66 +36,66 @@ describe('FormService', () => {
     model = module.get<Model<FormDocument>>(getModelToken('Form'));
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-
   describe('submitForm', () => {
-    it('should throw an error if email already exists', async () => {
-      const formData = {
-        name: 'João Silva',
-        email: 'joao@example.com',
-        cep: '12345678',
-      };
-
-      jest.spyOn(model, 'findOne').mockResolvedValue(formData as any);
-
-      await expect(service.submitForm(formData)).rejects.toThrow(
-        'Email já cadastrado',
-      );
-    });
-  });
-
-  describe('getForms', () => {
-    it('should return an array of forms', async () => {
-      const forms = [
-        {
+    describe('submitForm', () => {
+      it('should throw an error if email already exists', async () => {
+        const formData = {
           name: 'João Silva',
           email: 'joao@example.com',
           cep: '12345678',
-        },
-      ];
+        };
 
-      jest.spyOn(service, 'getForm').mockResolvedValue(forms as any);
+        jest.spyOn(model, 'findOne').mockResolvedValue(formData as any);
 
-      const result = await service.getForm();
-      expect(result).toEqual(forms);
-      expect(service.getForm).toHaveBeenCalled();
-    });
-  });
-
-  describe('updateForm', () => {
-    it('should update a form', async () => {
-      const formId = '64f1b2c3e4b0d8f8f8f8f8f8';
-      const formData = {
-        name: 'João Silva',
-        email: 'joao@example.com',
-        cep: '12345678',
-      };
-
-      const mockResponse = {
-        message: 'Formulário atualizado com sucesso!',
-        data: formData,
-      };
-
-      jest.spyOn(service, 'updateForm').mockResolvedValue(mockResponse as any);
-
-      const result = await service.updateForm(formId, formData);
-      expect(result).toEqual({
-        message: 'Formulário atualizado com sucesso!',
-        data: formData,
+        await expect(service.submitForm(formData)).rejects.toThrow(
+          'Email já cadastrado',
+        );
       });
-      expect(service.updateForm).toHaveBeenCalledWith(formId, formData);
+    });
+
+    describe('getForms', () => {
+      it('should return an array of forms', async () => {
+        const forms = [
+          {
+            name: 'João Silva',
+            email: 'joao@example.com',
+            cep: '12345678',
+          },
+        ];
+
+        jest.spyOn(service, 'getForm').mockResolvedValue(forms as any);
+
+        const result = await service.getForm();
+        expect(result).toEqual(forms);
+        expect(service.getForm).toHaveBeenCalled();
+      });
+    });
+
+    describe('updateForm', () => {
+      it('should update a form', async () => {
+        const formId = '64f1b2c3e4b0d8f8f8f8f8f8';
+        const formData = {
+          name: 'João Silva',
+          email: 'joao@example.com',
+          cep: '12345678',
+        };
+
+        const mockResponse = {
+          message: 'Formulário atualizado com sucesso!',
+          data: formData,
+        };
+
+        jest
+          .spyOn(service, 'updateForm')
+          .mockResolvedValue(mockResponse as any);
+
+        const result = await service.updateForm(formId, formData);
+        expect(result).toEqual({
+          message: 'Formulário atualizado com sucesso!',
+          data: formData,
+        });
+        expect(service.updateForm).toHaveBeenCalledWith(formId, formData);
+      });
     });
   });
 });
