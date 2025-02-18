@@ -4,9 +4,10 @@ import {
   HttpException,
   HttpStatus,
   Post,
+  Get,
+  ConflictException,
 } from '@nestjs/common';
 import { FormService } from './form.service';
-import { Axios } from 'axios';
 import { SubmitFormDto } from './submit-form.dto';
 
 @Controller('form')
@@ -18,7 +19,15 @@ export class FormController {
       const result = await this.formService.submitForm(submitFormDto);
       return { message: 'Formulário enviado com sucesso!', data: result };
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_GATEWAY);
+      if (error instanceof ConflictException) {
+        throw new ConflictException(error.message);
+      }
+      throw error;
     }
+  }
+
+  @Get('get')
+  async getForm() {
+    return this.formService.getForm();
   }
 }

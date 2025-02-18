@@ -3,7 +3,7 @@ import { SubmitFormDto } from '../submit-form.dto';
 
 export const FormSchema = new Schema({
   name: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   cep: { type: String, required: true },
 });
 
