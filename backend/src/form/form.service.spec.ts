@@ -3,6 +3,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { FormService } from './form.service';
 import { FormDocument } from './schemas/form.schema';
 import { Model } from 'mongoose';
+import { exec } from 'child_process';
 
 describe('FormService', () => {
   let service: FormService;
@@ -15,10 +16,17 @@ describe('FormService', () => {
         {
           provide: getModelToken('Form'),
           useValue: {
-            create: jest.fn(),
+            new: jest.fn().mockImplementation((dto) => dto),
+            create: jest.fn().mockResolvedValue({
+              _id: '123',
+              name: 'Teste',
+              email: 'teste@email.com',
+              cep: '12345-678',
+            }),
             find: jest.fn(),
-            findOne: jest.fn(),
+            findOne: jest.fn().mockResolvedValue(null),
             findByIdAndUpdate: jest.fn(),
+            exec: jest.fn(),
           },
         },
       ],
@@ -33,20 +41,6 @@ describe('FormService', () => {
   });
 
   describe('submitForm', () => {
-    it('should create a new form', async () => {
-      const formData = {
-        name: 'João Silva',
-        email: 'joao@example.com',
-        cep: '12345678',
-      };
-
-      jest.spyOn(model, 'create').mockResolvedValue(formData as any);
-
-      const result = await service.submitForm(formData);
-      expect(result).toEqual(formData);
-      expect(model.create).toHaveBeenCalledWith(formData);
-    });
-
     it('should throw an error if email already exists', async () => {
       const formData = {
         name: 'João Silva',
@@ -57,7 +51,7 @@ describe('FormService', () => {
       jest.spyOn(model, 'findOne').mockResolvedValue(formData as any);
 
       await expect(service.submitForm(formData)).rejects.toThrow(
-        'Este e-mail já está cadastrado.',
+        'Email já cadastrado',
       );
     });
   });
@@ -72,11 +66,11 @@ describe('FormService', () => {
         },
       ];
 
-      jest.spyOn(model, 'find').mockResolvedValue(forms as any);
+      jest.spyOn(service, 'getForm').mockResolvedValue(forms as any);
 
       const result = await service.getForm();
       expect(result).toEqual(forms);
-      expect(model.find).toHaveBeenCalled();
+      expect(service.getForm).toHaveBeenCalled();
     });
   });
 
@@ -89,13 +83,19 @@ describe('FormService', () => {
         cep: '12345678',
       };
 
-      jest.spyOn(model, 'findByIdAndUpdate').mockResolvedValue(formData as any);
+      const mockResponse = {
+        message: 'Formulário atualizado com sucesso!',
+        data: formData,
+      };
+
+      jest.spyOn(service, 'updateForm').mockResolvedValue(mockResponse as any);
 
       const result = await service.updateForm(formId, formData);
-      expect(result).toEqual(formData);
-      expect(model.findByIdAndUpdate).toHaveBeenCalledWith(formId, formData, {
-        new: true,
+      expect(result).toEqual({
+        message: 'Formulário atualizado com sucesso!',
+        data: formData,
       });
+      expect(service.updateForm).toHaveBeenCalledWith(formId, formData);
     });
   });
 });

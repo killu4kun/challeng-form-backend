@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 import { FormController } from './form.controller';
 import { FormService } from './form.service';
-import { MongooseModule } from '@nestjs/mongoose';
 import { FormSchema } from './schemas/form.schema';
 
 @Module({

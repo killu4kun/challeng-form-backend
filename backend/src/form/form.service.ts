@@ -6,12 +6,15 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class FormService {
-  constructor(@InjectModel('Form') private formModel: Model<FormDocument>) {}
+  constructor(
+    @InjectModel('Form') private readonly formModel: Model<FormDocument>,
+  ) {}
 
   async submitForm(submitFormDto: SubmitFormDto): Promise<FormDocument> {
-    const existingEmail = await this.formModel
-      .findOne({ email: submitFormDto.email })
-      .exec();
+    const existingEmail = await this.formModel.findOne({
+      email: submitFormDto.email,
+    });
+
     if (existingEmail) {
       throw new ConflictException('Email já cadastrado');
     }
