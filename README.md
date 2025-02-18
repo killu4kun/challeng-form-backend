@@ -20,7 +20,7 @@ Clone o repositório:
 
 ```bash
 git clone https://github.com/killu4kun/challeng-form-backend
-cd seu-repositorio/backend
+cd challeng-form-backend/backend
 ```
 
 Instale as dependências:
