@@ -23,4 +23,27 @@ export class FormService {
   async getForm(): Promise<FormDocument[]> {
     return this.formModel.find().exec();
   }
+
+  async updateForm(
+    id: string,
+    submitFormDto: SubmitFormDto,
+  ): Promise<FormDocument> {
+    const existingForm = await this.formModel.findById(id).exec();
+    if (!existingForm) {
+      throw new ConflictException('Formulário não encontrado');
+    }
+
+    const duplicateEmail = await this.formModel
+      .findOne({
+        email: submitFormDto.email,
+        _id: { $ne: id }, // exclui o proprio formulario
+      })
+      .exec();
+    if (duplicateEmail) {
+      throw new ConflictException('Email já cadastrado');
+    }
+
+    Object.assign(existingForm, submitFormDto);
+    return existingForm.save();
+  }
 }
